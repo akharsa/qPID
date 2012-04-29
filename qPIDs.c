@@ -10,31 +10,59 @@ void qPID_Init(qPID * q){
 }
 
 float qPID_Process(qPID * q, float PV){
+
+	// For local use
 	float ControllerOutput;
 	float Up, Ui, Ud;
+	float Kp, Ki, Kd;
 
-	float Ts = q->Ts;
-	float K = q->K;
-	float N = q->N;
-	float Ti = q->Ti;
-	float Td = q->Td;
-	float b = q->b;
-	float c = q->c;
-	float sp = q->SetPoint;
 
-	float Ui_old = (q->ctx).Ui_old;
-	float Ud_old = (q->ctx).Ud_old;
-	float PV_old = (q->ctx).PV_old;
+	switch (q->Architecture){
+		case NON_INTERACTING:
+			Kp = q->K;
+			Ki = ((q->K) * (q->Ts) )/ (q->Ti);
+			Kd = (q->K)*(q->Td);
+			break;
 
-	Up = K*(sp-PV);
-	Ud = Td/(Td + N*Ts) * (Ud_old - K*N*(PV-PV_old));
-	Ui = Ui_old+K*Ts/Ti*(sp-PV);
+		case INTERACTING:
+			Kp = (q->K)*(1+(q->Td)/(q->Ti));
+			Ki = ((q->K) * (q->Ts) )/ (q->Ti);
+			Kd = (q->K)*(q->Td);
+			break;
 
+		case PARALLEL:
+			Kp = q->Kp;
+			Ki = q->Ki;
+			Kd = q->Kd;
+			break;
+	}
+
+
+	// Proportional gain
+	Up = Kp*( ( (q->b)*(q->SetPoint) ) -PV);
+
+	// Deriative gain with filter
+	// FIXME: Derivative not implemented
+	//Ud = Td/(Td + N*Ts) * (Ud_old - K*N*(PV-PV_old));
+	//Ud = q->Td
+	Ud = 0.0;
+
+	// Calculate controler output for Automatic or manual mode
+	// FIXME: No bumpless transition
+	if (q->Mode == MANUAL){
+		ControllerOutput = q->ManualInput;
+	}else if (q->Mode == AUTOMATIC){
+		ControllerOutput = Up + Ui + Ud;
+	}
+
+	// Calc de integral for the next step
+	// FIXME: No antiwindup guard
+	Ui = q->ctx.Ui_old + Ki*((q->SetPoint)-PV);
+
+	// Save context for next step.
 	q->ctx.Ui_old = Ui;
 	q->ctx.Ud_old = Ud;
 	q->ctx.PV_old = PV;
-
-	ControllerOutput = Up + Ui + Ud;
 
 	return ControllerOutput;
 }

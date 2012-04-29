@@ -8,8 +8,9 @@
 //================================================================
 
 typedef enum{
-	INTERACTING,	 	// K, Ti, Td
-	NON_INTERACTING 	// Kp, Ki, Kd
+	NON_INTERACTING, 	// K, Ti, Td
+	INTERACTING,	 	// K, Ti, Td, DIFFERENTE EQN.
+	PARALLEL			// Kp, Ki, Kd
 } qPID_Architecture;
 
 typedef enum{
@@ -39,7 +40,9 @@ typedef struct{
 typedef struct{
 
 	// Constants
-	float K, Ti, Td;
+	float K, Ti, Td;	// For use in NON-INT or INT modes
+	float Kp, Ki, Kd;	// For use with PARALLEL mode
+
 	float N;
 	float b, c;
 	float Ts;
@@ -56,7 +59,7 @@ typedef struct{
 	qPID_Feature 		AntiWindup;
 	qPID_Feature 		Bumpless;
 	qPID_Mode			Mode;
-	//qPID_Architecture	Architecture;
+	qPID_Architecture	Architecture;
 
 	qPID_Context		ctx;
 } qPID;
