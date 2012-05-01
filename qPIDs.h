@@ -8,30 +8,17 @@
 //================================================================
 
 typedef enum{
-	NON_INTERACTING, 	// K, Ti, Td
-	INTERACTING,	 	// K, Ti, Td, DIFFERENTE EQN.
-	PARALLEL			// Kp, Ki, Kd
-} qPID_Architecture;
-
-typedef enum{
-	ENABLED,
-	DISABLED
+	DISABLED=0,
+	ENABLED
 } qPID_Feature;
 
 typedef enum{
-	MANUAL,
+	MANUAL=0,
 	AUTOMATIC
 } qPID_Mode;
 
 typedef struct{
-
-	//float input_old;
-	//float output_old;
-	//float error_old;
-
 	float PV_old;
-	//float CO_old;
-
 	float Ui_old;
 	float Ud_old;
 
@@ -39,35 +26,30 @@ typedef struct{
 
 typedef struct{
 
-	// Constants
+	// Parameters:
 	float K, Ti, Td;	// For use in NON-INT or INT modes
-	float Kp, Ki, Kd;	// For use with PARALLEL mode
 
-	float N;
-	float b, c;
-	float Ts;
+	float OutputMax;	// For windup
+	float OutputMin;	// For windup
 
-	// Inputs:
-	float SetPoint; 	// For auto mode
-	float ManualInput;		// For manual mode
-	
-	// AntiWindup:
-	float OutputMax;
-	float OutputMin;
+	float N;			// For derivator
+	float b, c;			// For setpoint Weighting
+
+	float Ts;			// General propoerty
 	
 	// Features:
+	qPID_Mode			Mode;
 	qPID_Feature 		AntiWindup;
 	qPID_Feature 		Bumpless;
-	qPID_Mode			Mode;
-	qPID_Architecture	Architecture;
 
 	qPID_Context		ctx;
+
 } qPID;
 
 //================================================================
 // Prototypes
 //================================================================
 void qPID_Init(qPID * q);
-float qPID_Process(qPID * q, float ProcessVariable);
+float qPID_Process(qPID * q, float Input, float ProcessVariable, float terms[]);
 
 #endif
