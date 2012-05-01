@@ -21,7 +21,6 @@ typedef struct{
 	float PV_old;
 	float Ui_old;
 	float Ud_old;
-
 } qPID_Context;
 
 typedef struct{

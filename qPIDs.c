@@ -38,13 +38,16 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 
 
 	// Calculate controler output for Automatic or manual mode
-	// FIXME: No bumpless transition
-	if (q->Mode == MANUAL){
 
+	if (q->Mode == MANUAL){
 		ControllerOutput = Input;
 
+		if (q->Bumpless == ENABLED){
+			q->ctx.Ui_old = PV;
+		}
+
 	}else if (q->Mode == AUTOMATIC){
-		ControllerOutput = Up + Ui + Ud;
+		ControllerOutput =  Up + Ui + Ud;
 	}
 
 	// Output parameters for debug
