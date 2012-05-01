@@ -26,36 +26,37 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	Kd_a = q->Td/(q->Td + q->N*q->Ts) ;
 	Kd_b = (q->K*q->Td*q->N)/(q->Td + q->N*q->Ts);
 
+
+	// Proportional gain
+	Up = Kp*( ( (q->b)*(Input) ) - PV);
+
+	// Deriative gain with filter
+	Ud = Kd_a * (q->ctx.Ud_old) - Kd_b*(PV-q->ctx.PV_old);
+
+	// Get last integral
+	Ui =  q->ctx.Ui_old;
+
+
 	// Calculate controler output for Automatic or manual mode
 	// FIXME: No bumpless transition
 	if (q->Mode == MANUAL){
 
 		ControllerOutput = Input;
-		q->ctx.Ui_old = Input;
 
 	}else if (q->Mode == AUTOMATIC){
-
-		// Proportional gain
-		Up = Kp*( ( (q->b)*(Input) ) - PV);
-
-		// Deriative gain with filter
-		Ud = Kd_a * (q->ctx.Ud_old) - Kd_b*(PV-q->ctx.PV_old);
-
-		// Get last integral
-		Ui =  q->ctx.Ui_old;
-
 		ControllerOutput = Up + Ui + Ud;
-
-		if (terms!=NULL){
-			terms[0] = Up;
-			terms[1] = Ui;
-			terms[2] = Ud;
-		}
-		// Calc de integral for the next step
-		// FIXME: No antiwindup guard
-		Ui = q->ctx.Ui_old + Ki*((Input)-PV);
 	}
 
+	// Output parameters for debug
+	if (terms!=NULL){
+		terms[0] = Up;
+		terms[1] = Ui;
+		terms[2] = Ud;
+	}
+
+	// Calc de integral for the next step
+	// FIXME: No antiwindup guard
+	Ui = q->ctx.Ui_old + Ki*((Input)-PV);
 
 	// Save context for next step.
 	q->ctx.Ui_old = Ui;
