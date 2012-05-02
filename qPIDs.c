@@ -36,7 +36,6 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	// Get last integral
 	Ui =  q->ctx.Ui_old;
 
-
 	// Calculate controler output for Automatic or manual mode
 
 	if (q->Mode == MANUAL){
@@ -48,6 +47,13 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 
 	}else if (q->Mode == AUTOMATIC){
 		ControllerOutput =  Up + Ui + Ud;
+
+	}else if (q->Mode == RELAY){
+		if ((Input-PV)>=0){
+			ControllerOutput = q->OutputMax;
+		}else{
+			ControllerOutput = q->OutputMin;
+		}
 	}
 
 	// Output parameters for debug

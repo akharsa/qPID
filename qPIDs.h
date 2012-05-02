@@ -14,7 +14,8 @@ typedef enum{
 
 typedef enum{
 	MANUAL=0,
-	AUTOMATIC
+	AUTOMATIC,
+	RELAY
 } qPID_Mode;
 
 typedef struct{
