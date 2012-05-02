@@ -58,8 +58,16 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	}
 
 	// Calc de integral for the next step
-	// FIXME: No antiwindup guard
 	Ui = q->ctx.Ui_old + Ki*((Input)-PV);
+
+	// Anti Windup
+	if ( (q->AntiWindup == ENABLED) && (q->Mode=AUTOMATIC) ){
+		if (Ui>=q->OutputMax){
+			Ui = q->OutputMax;
+		}else if (Ui<=q->OutputMin){
+			Ui = q->OutputMin;
+		}
+	}
 
 	// Save context for next step.
 	q->ctx.Ui_old = Ui;
