@@ -1,7 +1,7 @@
 
 #include "qPIDs.h"
 #include <stdio.h>
-
+#include <math.h>
 
 void qPID_Init(qPID * q){
 	q->ctx.Ui_old = 0.0;
@@ -9,9 +9,6 @@ void qPID_Init(qPID * q){
 	q->ctx.PV_old = 0.0;
 }
 
-
-//float qPID_Process(qPID * q, float PV){
-//float qPID_Process(qPID * q, float Input, float PV ){
 float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 
 
@@ -21,6 +18,9 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	float Kp, Ki, Kd_a, Kd_b;
 
 
+	if (fabs(q->Ti)<EPSILON){
+		q->Ti = EPSILON;
+	}
 	Kp = q->K;
 	Ki = ((q->K) * (q->Ts) )/ (q->Ti);
 	Kd_a = q->Td/(q->Td + q->N*q->Ts) ;
