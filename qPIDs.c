@@ -62,6 +62,11 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 
 		case AUTOMATIC:
 			ControllerOutput =  Up + Ui + Ud;
+			if (ControllerOutput > q->OutputMax){
+				ControllerOutput = q->OutputMax;
+			}else if (ControllerOutput < q->OutputMin){
+				ControllerOutput = q->OutputMin;
+			}
 			break;
 
 		case RELAY:
