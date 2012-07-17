@@ -115,7 +115,7 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	Ui = q->ctx.Ui_old + Ki*((Input)-PV);
 
 	// Anti Windup
-	if ( (q->AntiWindup == ENABLED) && (q->Mode=AUTOMATIC) ){
+	if ( (q->AntiWindup == ENABLED) && (q->Mode==AUTOMATIC) ){
 		if (Ui>=q->OutputMax){
 			Ui = q->OutputMax;
 		}else if (Ui<=q->OutputMin){
