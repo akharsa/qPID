@@ -56,7 +56,7 @@ typedef struct{
 	float OutputMax;	// For windup
 	float OutputMin;	// For windup
 
-	float N;			// For derivator
+	float Nd;			// For derivator
 	float b, c;			// For setpoint Weighting
 
 	float Ts;			// General propoerty
@@ -74,10 +74,12 @@ typedef struct{
 // Defines
 //================================================================
 #define	EPSILON	0.0000001
+
 //================================================================
 // Prototypes
 //================================================================
 void qPID_Init(qPID * q);
-float qPID_Process(qPID * q, float Input, float ProcessVariable, float terms[]);
+float qPID_Process_(qPID * q, float Input, float ProcessVariable, float terms[]);
+#define qPID_Procees(pPID,input,pv) qPID_Process_(pPID,input,pv,NULL);
 
 #endif

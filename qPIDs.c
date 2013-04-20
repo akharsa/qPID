@@ -32,7 +32,7 @@ void qPID_Init(qPID * q){
 	q->ctx.SP_old = 0.0;
 }
 
-float qPID_Process(qPID * q, float Input, float PV, float terms[]){
+float qPID_Process_(qPID * q, float Input, float PV, float terms[]){
 
 
 	// =====================================
@@ -56,9 +56,9 @@ float qPID_Process(qPID * q, float Input, float PV, float terms[]){
 	}
 	Kp = q->K;
 	Ki = ((q->K) * (q->Ts) )/ (q->Ti);
-	Kd_a = q->Td/(q->Td + q->N*q->Ts) ;
-	Kd_b = (q->K*q->Td*q->N)/(q->Td + q->N*q->Ts);
-	Kd_c = (q->c*q->K*q->Td*q->N)/(q->Td + q->N*q->Ts);
+	Kd_a = q->Td/(q->Td + q->Nd*q->Ts) ;
+	Kd_b = (q->K*q->Td*q->Nd)/(q->Td + q->Nd*q->Ts);
+	Kd_c = (q->c*q->K*q->Td*q->Nd)/(q->Td + q->Nd*q->Ts);
 
 
 	// Proportional gain
