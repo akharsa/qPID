@@ -1,3 +1,19 @@
+# qPID Digital PID controller library
+
+## Introduction
+This library is a digital Proportional-Integrative-Derivative digital controller designed for embedded systems to interact with real systems.
+
+## Principle of work and definitions
+### Block Diagram
+![Block diagram](qpid_diagram.png)
+
+### Detailed information
+Full mathematical description and testing results of this libarary can be found (in spanish) in [kharsansky-quadrotor-control-thesis](kharsansky-quadrotor-control-thesis.pdf).
+
+## Usage example
+
+```
+
 #include "qPIDs.h"
 
 float setPoint = 0.0;
@@ -55,6 +71,4 @@ void example(void){
 	}
 	
 }
-
-
-
+```
