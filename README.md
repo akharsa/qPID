@@ -12,7 +12,7 @@ Full mathematical description and testing results of this libarary can be found 
 
 ## Usage example
 
-```
+```C
 
 #include "qPIDs.h"
 
