@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <platform/lib/qPIDs.h>
+#include "qPIDs.h"
 
 void qPID_Init(qPID *q)
 {
