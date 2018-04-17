@@ -31,7 +31,7 @@ setActuator(void);				// A function that sets the PWM output for controlling the
 void example(void){
 
 	// Declare de new object
-	qPID controler;
+	qPID controller;
 	
 	// Configure settings
 	controller.AntiWindup = ENABLED;
