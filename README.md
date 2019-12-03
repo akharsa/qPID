@@ -37,9 +37,6 @@ void example(void){
 	controller.AntiWindup = ENABLED;
 	controller.Bumpless = ENABLED;
 	
-	// Set mode to auotmatic (otherwise it will be in manual mode)
-	controller.Mode = AUTOMATIC;
-	
 	// Configure de output limits for clamping
 	controller.OutputMax = 1.0;
 	controller.OutputMin = -1.0;
@@ -53,6 +50,9 @@ void example(void){
 	
 	// Init de controller
 	qPID_Init(&controller);
+		
+	// Set mode to auotmatic (otherwise it will be in manual mode)
+	controller.Mode = AUTOMATIC;
 
 	// Set the tunning constants	
 	controller.K = 0.5;
