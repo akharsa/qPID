@@ -26,7 +26,7 @@ float output = 0.0;
 
 float readSensor(void);			// A function that reads the motor speed from a sensor
 float readSetPoint(void);		// A function that reads the desired speed from a potentiometer
-setActuator(void);				// A function that sets the PWM output for controlling the motor
+void setActuator(float);				// A function that sets the PWM output for controlling the motor
 
 void example(void){
 
@@ -65,7 +65,7 @@ void example(void){
 		setPoint = readSetPoint(); 			// update the user desired value
 		
 		// Update the PID and get the new output
-		output = qPID_Procees(&controller, setPoint, sensor);
+		output = qPID_Process(&controller, setPoint, sensor);
 		
 		setActuator(output);				// update the actuator input
 	}
